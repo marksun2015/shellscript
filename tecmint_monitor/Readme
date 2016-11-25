@@ -1,0 +1,5 @@
+# A Shell Script to Monitor Network, Disk Usage, Uptime, Load Average and RAM Usage in Linux
+
+$ wget http://tecmint.com/wp-content/scripts/tecmint_monitor.sh  
+$ chmod 755 tecmint_monitor.sh  
+$ ./tecmint_monitor.sh -i  
