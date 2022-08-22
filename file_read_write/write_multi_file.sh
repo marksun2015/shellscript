@@ -1,31 +1,36 @@
-COUNT=30
+FILE_COUNT=6
+DATA_COUNT=5
+FILE_NAME="testfile"
 
 while [ 1 ];
 do
-    DATA=$((1 + $RANDOM % 100000))
-    DATA1=$((1 + $RANDOM % 10000000))
-    DATA2=$((1 + $RANDOM % 1000))
+    # random data #
+    for i in `seq 1 $DATA_COUNT`
+    do
+      DATA[i]=$((1 + $RANDOM % 100000))
+    done
 
-    for i in `seq 1 $COUNT`
+    # write files #
+    for i in `seq 1 $FILE_COUNT`
     do                     
-        echo $DATA > testfile$i
-        echo $DATA1 >> testfile$i
-        echo $DATA2 >> testfile$i
+      echo ${DATA[1]} > $FILE_NAME$i    # clear previous data
+      for j in `seq 2 $DATA_COUNT`
+      do
+        echo ${DATA[j]} >> $FILE_NAME$i
+      done
     done                  
 
-    for i in `seq 1 $COUNT`
+    # check data #
+    for i in `seq 1 $FILE_COUNT`
     do                     
-        RD=$(cat testfile$i | tail +1 |head -1)
-        if [ "$RD" != "${DATA}" ] ; then
-                echo "OOPPSSS D"              
-        fi                 
-        RD=$(cat testfile$i | tail +2 |head -1)
-        if [ "$RD" != "${DATA1}" ] ; then
-                echo "OOPPSSS D1"              
-        fi                 
-        RD=$(cat testfile$i | tail +3 |head -1)
-        if [ "$RD" != "${DATA2}" ] ; then
-                echo "OOPPSSS D2"              
-        fi                 
+      for j in `seq 1 $DATA_COUNT`
+      do
+        RD=$(cat $FILE_NAME$i | tail -n +$j | head -1)
+        if [ "$RD" != "${DATA[j]}" ] ; then
+            echo "OOPS!!! Read Data Error!!!"
+        #else
+        #    echo "$RD"
+        fi
+      done
     done
 done
